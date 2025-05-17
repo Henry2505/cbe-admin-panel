@@ -49,15 +49,43 @@
     <div id="adminError"></div>
   </form>
 
-<script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-  const supabase = createClient(
-    'https://dapwpgvnfjcfqqhrpxla.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFub24iLCJpYXQiOjE3NDcwNDA4ODgsImV4cCI6MjA2MjYxNjg4OH0.ICC0UsLlzJDNre7rFCeD3k6iVzo6jOJgn3PhABpEMsQ'
-  )
+    const supabase = createClient(
+      'https://dapwpgvnfjcfqqhrpxla.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFub24iLCJpYXQiOjE3NDcwNDA4ODgsImV4cCI6MjA2MjYxNjg4OH0.ICC0UsLlzJDNre7rFCeD3k6iVzo6jOJgn3PhABpEMsQ'
+    )
 
-  // … rest of your login logic …
-</script>
+    const form = document.getElementById('adminLoginForm')
+    const errBox = document.getElementById('adminError')
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault()
+      errBox.textContent = ''
+
+      const email = document.getElementById('adminEmail').value
+      const password = document.getElementById('adminPassword').value
+
+      console.log('Attempting sign-in for', email)
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+
+      if (error) {
+        console.error('Sign-in error:', error)
+        errBox.textContent = error.message
+        return
+      }
+
+      console.log('Sign-in data:', data)
+      // In supabase-js v2, `data.session` holds the session object on success
+      if (data.session) {
+        console.log('Successful login, redirecting…')
+        window.location.href = 'admin-panel-private.html'
+      } else {
+        console.warn('No session returned:', data)
+        errBox.textContent = 'Login did not return a session. Check console.'
+      }
+    })
+  </script>
 </body>
 </html>
