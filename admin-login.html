@@ -77,7 +77,6 @@
       }
 
       console.log('Sign-in data:', data)
-      // In supabase-js v2, `data.session` holds the session object on success
       if (data.session) {
         console.log('Successful login, redirecting…')
         window.location.href = 'admin-panel-private.html'
