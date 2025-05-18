@@ -11,36 +11,39 @@
 </head>
 <body>
   <h1>Upload Admin Panel Files</h1>
+  <p>Select all your panel files (HTML, JS, CSS, MP4) below:</p>
   <input type="file" id="fileInput" multiple />
   <button id="uploadBtn">Upload to Storage</button>
   <pre id="log"></pre>
+
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-    - const supabase = createClient(
--   'https://dapwpgvnfjcfqqhrpxla.supabase.co',
--   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…<your anon key>…'
-- )
-+ const supabase = createClient(
-+   'https://dapwpgvnfjcfqqhrpxla.supabase.co',
-+   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…<your service role key>…'
-+ )
+    // ⚠️ Use your Service Role key here:
+    const supabase = createClient(
+      'https://dapwpgvnfjcfqqhrpxla.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlcnZpY2NlX3JvbGUiLCJpYXQiOjE3NDcwNDA4ODgsImV4cCI6MjA2MjYxNjg4OH0.Xe1EO_BbF0Rtmp2QpM5L-dwCCvXvcfMu5A_ieRCyp5U'
+    )
+
+    const bucket = 'siteandtoggle'  // your public bucket name
 
     document.getElementById('uploadBtn').onclick = async () => {
       const files = document.getElementById('fileInput').files
       const log = document.getElementById('log')
       log.textContent = ''
       for (let file of files) {
-        const path = file.name
+        const path = file.name.replace(/\.txt$/, '')  // strip any .txt suffix
         log.textContent += `Uploading ${path}…\n`
         const { error } = await supabase
           .storage
-          .from('site')
+          .from(bucket)
           .upload(path, file, { upsert: true })
         if (error) log.textContent += `❌ ${path}: ${error.message}\n`
-        else log.textContent += `✅ ${path} uploaded\n`
+        else    log.textContent += `✅ ${path} uploaded\n`
       }
-      log.textContent += 'Done.\n'
+      log.textContent += '\nAll files processed.\n\nNow open the URLs below to access your admin panel:\n'
+      log.textContent += `• Login: https://dapwpgvnfjcfqqhrpxla.supabase.co/storage/v1/object/public/${bucket}/admin-login.html\n`
+      log.textContent += `• Panel: https://dapwpgvnfjcfqqhrpxla.supabase.co/storage/v1/object/public/${bucket}/admin-panel-private.html\n`
     }
   </script>
 </body>
