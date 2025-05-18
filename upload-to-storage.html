@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Upload Admin Panel to Supabase Storage</title>
+  <style>
+    body { font-family: sans-serif; padding:2rem; background:#f4f4f4; }
+    input, button { display:block; margin:1rem 0; padding:.5rem; width:100%; }
+    pre { background:#222; color:#0f0; padding:1rem; max-height:200px; overflow:auto; }
+  </style>
+</head>
+<body>
+  <h1>Upload Admin Panel Files</h1>
+  <input type="file" id="fileInput" multiple />
+  <button id="uploadBtn">Upload to Storage</button>
+  <pre id="log"></pre>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const supabase = createClient(
+      'https://dapwpgvnfjcfqqhrpxla.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFub24iLCJpYXQiOjE3NDcwNDA4ODgsImV4cCI6MjA2MjYxNjg4OH0.ICC0UsLlzJDNre7rFCeD3k6iVzo6jOJgn3PhABpEMsQ'
+    )
+
+    document.getElementById('uploadBtn').onclick = async () => {
+      const files = document.getElementById('fileInput').files
+      const log = document.getElementById('log')
+      log.textContent = ''
+      for (let file of files) {
+        const path = file.name
+        log.textContent += `Uploading ${path}…\n`
+        const { error } = await supabase
+          .storage
+          .from('site')
+          .upload(path, file, { upsert: true })
+        if (error) log.textContent += `❌ ${path}: ${error.message}\n`
+        else log.textContent += `✅ ${path} uploaded\n`
+      }
+      log.textContent += 'Done.\n'
+    }
+  </script>
+</body>
+</html>
