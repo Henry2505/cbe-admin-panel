@@ -17,10 +17,14 @@
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-    const supabase = createClient(
-      'https://dapwpgvnfjcfqqhrpxla.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFub24iLCJpYXQiOjE3NDcwNDA4ODgsImV4cCI6MjA2MjYxNjg4OH0.ICC0UsLlzJDNre7rFCeD3k6iVzo6jOJgn3PhABpEMsQ'
-    )
+    - const supabase = createClient(
+-   'https://dapwpgvnfjcfqqhrpxla.supabase.co',
+-   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…<your anon key>…'
+- )
++ const supabase = createClient(
++   'https://dapwpgvnfjcfqqhrpxla.supabase.co',
++   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…<your service role key>…'
++ )
 
     document.getElementById('uploadBtn').onclick = async () => {
       const files = document.getElementById('fileInput').files
