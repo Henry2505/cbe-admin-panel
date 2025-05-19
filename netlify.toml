@@ -1,0 +1,4 @@
+[build.environment]
+  JSONBIN_KEY     = "$2a$10$p1W0q7sZAf9wNBiA2xeBTeN5b6JvfC/qYGT0XBWgSFiCl2NAoBXK6"
+  SIGNALS_BIN_ID  = "your-signals-id-here"
+  TRADES_BIN_ID   = "your-trades-id-here"
